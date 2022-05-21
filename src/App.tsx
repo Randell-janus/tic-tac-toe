@@ -81,11 +81,14 @@ const App: FC = () => {
       <Square
         value={squares[i]}
         onClick={() => handleTurn(i)}
-        styles={`${!clicked && "hover:scale-110"} ${
+        styles={`${!clicked && "active:scale-110 hover:bg-slate-300"} ${
           clicked && "hover:cursor-default"
         } ${isX ? "bg-blue-300" : isO && "bg-red-300"} ${
-          winningPattern?.includes(i) && "animate-bounce bg-green-300"
-        } ${winningPattern && "hover:scale-100 hover:cursor-default"}`}
+          winningPattern?.includes(i) && "bg-green-300 animate-bounce"
+        } ${
+          winningPattern &&
+          "hover:scale-100 hover:cursor-default active:scale-100"
+        }`}
       />
     );
   };
@@ -116,7 +119,7 @@ const App: FC = () => {
           </div>
           <button
             onClick={handleRestart}
-            className="font-bold bg-violet-400 px-4 py-3 rounded-md hover:scale-110 active:bg-violet-500 transition-all text-sm sm:text-xl"
+            className="font-bold bg-violet-400 px-4 py-3 rounded-md active:scale-110 hover:bg-violet-500 transition-all text-sm sm:text-xl"
           >
             RESTART GAME
           </button>
