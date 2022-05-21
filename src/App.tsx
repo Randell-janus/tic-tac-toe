@@ -81,13 +81,13 @@ const App: FC = () => {
       <Square
         value={squares[i]}
         onClick={() => handleTurn(i)}
-        styles={`${!clicked && "active:scale-110 hover:bg-slate-300"} ${
+        styles={`${!clicked && "active:bg-slate-300 hover:bg-slate-300"} ${
           clicked && "hover:cursor-default"
         } ${isX ? "bg-blue-300" : isO && "bg-red-300"} ${
           winningPattern?.includes(i) && "bg-green-300 animate-bounce"
         } ${
           winningPattern &&
-          "hover:scale-100 hover:cursor-default active:scale-100"
+          "hover:cursor-default"
         }`}
       />
     );
