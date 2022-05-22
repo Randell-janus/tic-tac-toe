@@ -9,7 +9,7 @@ interface ISquare {
 const Square: FC<ISquare> = ({ value, onClick, styles }) => {
   return (
     <button
-      className={`${styles} relative transition-all bg-slate-200 text-slate-900 rounded-lg font-bold p-10 sm:p-20 text-4xl sm:text-8xl`}
+      className={`${styles} relative transition-all bg-slate-200 text-slate-900 rounded-lg font-bold p-11 sm:p-20 text-4xl sm:text-8xl`}
       onClick={onClick}
     >
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -23,8 +23,8 @@ const App: FC = () => {
   const [squares, setSquares] = useState<string[] | []>(Array(9).fill(null));
   const [isXTurn, setIsXTurn] = useState<boolean>(true);
 
-  const checkWinner = (squares: [] | string[]): number[] | any => {
-    const winConditions = [
+  const checkWinner = (squares: [] | string[]): any => {
+    const winConditions: number[][] = [
       [0, 1, 2],
       [3, 4, 5],
       [6, 7, 8],
@@ -59,7 +59,7 @@ const App: FC = () => {
     setIsXTurn(!isXTurn);
   };
 
-  const winningPattern = checkWinner(squares);
+  const winningPattern: number[] = checkWinner(squares);
   const isBoardFull = squares.every((i) => i !== null);
 
   let status;
@@ -67,7 +67,7 @@ const App: FC = () => {
   if (winningPattern) {
     status = `Winner: ${isXTurn ? "O" : "X"}`;
   } else if (isBoardFull && !winningPattern) {
-    status = "Draw game!";
+    status = "Draw!";
   } else {
     status = "Player: " + (isXTurn ? "X" : "O");
   }
@@ -84,11 +84,8 @@ const App: FC = () => {
         styles={`${!clicked && "active:bg-slate-300 hover:bg-slate-300"} ${
           clicked && "hover:cursor-default"
         } ${isX ? "bg-blue-300" : isO && "bg-red-300"} ${
-          winningPattern?.includes(i) && "bg-green-300 animate-bounce"
-        } ${
-          winningPattern &&
-          "hover:cursor-default"
-        }`}
+          winningPattern?.includes(i) && "bg-green-300 animate-beat"
+        } ${winningPattern && "hover:cursor-default"}`}
       />
     );
   };
@@ -119,9 +116,23 @@ const App: FC = () => {
           </div>
           <button
             onClick={handleRestart}
-            className="font-bold bg-violet-400 px-4 py-3 rounded-md active:scale-110 hover:bg-violet-500 transition-all text-sm sm:text-xl"
+            className="flex items-center space-x-2 font-bold bg-violet-400 px-4 py-3 rounded-md active:scale-110 hover:bg-violet-500 transition-all text-sm sm:text-xl"
           >
-            RESTART GAME
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 sm:h-5 sm:w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            <p>RESET</p>
           </button>
         </div>
       </div>
