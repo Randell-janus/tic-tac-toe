@@ -76,16 +76,19 @@ const App: FC = () => {
     const clicked = squares[i];
     const isX = clicked === "X";
     const isO = clicked === "O";
+    const isGameFinish = winningPattern && "hover:cursor-default";
+    const markStyles = isX ? "bg-blue-300" : isO && "bg-red-300";
+    const clickedStyles = clicked && "hover:cursor-default";
+    const notClickedStyles =
+      !clicked && "active:bg-slate-300 hover:bg-slate-300";
+    const winningPatternStyles =
+      winningPattern?.includes(i) && "bg-green-300 animate-beat";
 
     return (
       <Square
         value={squares[i]}
         onClick={() => handleTurn(i)}
-        styles={`${!clicked && "active:bg-slate-300 hover:bg-slate-300"} ${
-          clicked && "hover:cursor-default"
-        } ${isX ? "bg-blue-300" : isO && "bg-red-300"} ${
-          winningPattern?.includes(i) && "bg-green-300 animate-beat"
-        } ${winningPattern && "hover:cursor-default"}`}
+        styles={`${isGameFinish} ${markStyles} ${clickedStyles} ${notClickedStyles} ${winningPatternStyles}`}
       />
     );
   };
@@ -116,22 +119,8 @@ const App: FC = () => {
           </div>
           <button
             onClick={handleRestart}
-            className="flex items-center space-x-2 font-bold bg-violet-400 px-4 py-3 rounded-md active:scale-110 hover:bg-violet-500 transition-all text-sm sm:text-xl"
+            className="font-bold bg-violet-400 px-4 py-3 rounded-md active:scale-110 hover:bg-violet-500 transition-all text-sm sm:text-xl"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 sm:h-5 sm:w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
             <p>RESET</p>
           </button>
         </div>

@@ -3,7 +3,7 @@
 Simple Tic-tac-toe game
 
 - https://tic-tac-toe-randell-janus.vercel.app/
-- Create-react-app, Tailwind
+- Built with React and TailwindCSS
 
 ## Preview
 
