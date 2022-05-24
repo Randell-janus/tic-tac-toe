@@ -3,8 +3,8 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        bounce: "bounce 0.5s infinite",
-        beat: "beat 0.5s infinite",
+        bounce: "bounce 1s infinite",
+        beat: "beat 1s infinite",
       },
       keyframes: {
         beat: {

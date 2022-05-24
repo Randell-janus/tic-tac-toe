@@ -4,6 +4,7 @@ import Square from "./components/Square";
 const App = () => {
   const [squares, setSquares] = useState<string[] | []>(Array(9).fill(null));
   const [isXTurn, setIsXTurn] = useState<boolean>(true);
+  const [isBeat, setIsBeat] = useState<boolean>(true);
 
   const checkWinner = (squares: [] | string[]): any => {
     const winConditions = [
@@ -57,12 +58,14 @@ const App = () => {
   const handleRestart = (): void => {
     setIsXTurn(true);
     setSquares(Array(9).fill(null));
+    setIsBeat((prev) => !prev);
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="space-y-4 sm:space-y-8">
-        <h1 className="text-2xl sm:text-5xl font-bold">TIC-TAC-TOE</h1>
+        <h1 className="font-bold">TIC-TAC-TOE</h1>
+
         <div className="grid grid-cols-3 gap-2 sm:gap-4">
           {squares.map((value, i) => (
             <Square
@@ -73,7 +76,10 @@ const App = () => {
                 squares[i] === "X" ? "x-color" : squares[i] === "O" && "o-color"
               } ${squares[i] && "hover:cursor-default"} ${
                 !squares[i] && "hover:bg-slate-300"
-              } ${winningPattern?.includes(i) && "winning-color animate-beat"}`}
+              } ${
+                winningPattern?.includes(i) &&
+                `winning-color ${isBeat ? "animate-beat" : "animate-bounce"}`
+              }`}
             />
           ))}
         </div>

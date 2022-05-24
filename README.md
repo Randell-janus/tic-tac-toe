@@ -1,9 +1,9 @@
 # Tic-tac-toe
 
-Simple Tic-tac-toe game
+Tic-tac-toe game using React.js and Tailwind CSS
 
 - https://tic-tac-toe-randell-janus.vercel.app/
-- Built with React and TailwindCSS
+- Toggle between different winning animations as you reset the game!
 
 ## Preview
 
