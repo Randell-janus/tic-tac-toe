@@ -1,30 +1,12 @@
-import { FC, useState, MouseEventHandler } from "react";
+import { useState } from "react";
+import Square from "./components/Square";
 
-interface ISquare {
-  value: string | null;
-  onClick: MouseEventHandler<HTMLButtonElement>;
-  styles: string;
-}
-
-const Square: FC<ISquare> = ({ value, onClick, styles }) => {
-  return (
-    <button
-      className={`${styles} relative transition-all bg-slate-200 text-slate-900 rounded-lg font-bold p-11 sm:p-20 text-4xl sm:text-8xl`}
-      onClick={onClick}
-    >
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        {value}
-      </div>
-    </button>
-  );
-};
-
-const App: FC = () => {
+const App = () => {
   const [squares, setSquares] = useState<string[] | []>(Array(9).fill(null));
   const [isXTurn, setIsXTurn] = useState<boolean>(true);
 
   const checkWinner = (squares: [] | string[]): any => {
-    const winConditions: number[][] = [
+    const winConditions = [
       [0, 1, 2],
       [3, 4, 5],
       [6, 7, 8],
@@ -59,7 +41,7 @@ const App: FC = () => {
     setIsXTurn(!isXTurn);
   };
 
-  const winningPattern: number[] = checkWinner(squares);
+  const winningPattern = checkWinner(squares);
   const isBoardFull = squares.every((i) => i !== null);
 
   let status;
@@ -72,54 +54,36 @@ const App: FC = () => {
     status = "Player: " + (isXTurn ? "X" : "O");
   }
 
-  const squareWrapper = (i: number): JSX.Element => {
-    const clicked = squares[i];
-    const isX = clicked === "X";
-    const isO = clicked === "O";
-    const isGameFinish = winningPattern && "hover:cursor-default";
-    const markStyles = isX ? "bg-blue-300" : isO && "bg-red-300";
-    const clickedStyles = clicked && "hover:cursor-default";
-    const notClickedStyles =
-      !clicked && "active:bg-slate-300 hover:bg-slate-300";
-    const winningPatternStyles =
-      winningPattern?.includes(i) && "bg-green-300 animate-beat";
-
-    return (
-      <Square
-        value={squares[i]}
-        onClick={() => handleTurn(i)}
-        styles={`${isGameFinish} ${markStyles} ${clickedStyles} ${notClickedStyles} ${winningPatternStyles}`}
-      />
-    );
-  };
-
   const handleRestart = (): void => {
     setIsXTurn(true);
     setSquares(Array(9).fill(null));
   };
 
   return (
-    <div className="font-mono min-h-screen flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="space-y-4 sm:space-y-8">
-        <div className="text-2xl sm:text-5xl font-bold">TIC-TAC-TOE</div>
+        <h1 className="text-2xl sm:text-5xl font-bold">TIC-TAC-TOE</h1>
         <div className="grid grid-cols-3 gap-2 sm:gap-4">
-          {squareWrapper(0)}
-          {squareWrapper(1)}
-          {squareWrapper(2)}
-          {squareWrapper(3)}
-          {squareWrapper(4)}
-          {squareWrapper(5)}
-          {squareWrapper(6)}
-          {squareWrapper(7)}
-          {squareWrapper(8)}
+          {squares.map((value, i) => (
+            <Square
+              key={i}
+              value={value}
+              onClick={() => handleTurn(i)}
+              styles={`${winningPattern && "hover:cursor-default"} ${
+                squares[i] === "X" ? "x-color" : squares[i] === "O" && "o-color"
+              } ${squares[i] && "hover:cursor-default"} ${
+                !squares[i] && "hover:bg-slate-300"
+              } ${winningPattern?.includes(i) && "winning-color animate-beat"}`}
+            />
+          ))}
         </div>
         <div className="flex items-center justify-between border-t pt-4 sm:pt-8">
-          <div className="font-semibold text-sm sm:text-xl bg-slate-200 px-4 py-3 rounded-md">
+          <p className="font-semibold bg-slate-200 px-4 py-3 rounded-md">
             {status}
-          </div>
+          </p>
           <button
             onClick={handleRestart}
-            className="flex items-center space-x-2 font-bold bg-violet-400 px-4 py-3 rounded-md active:scale-110 hover:bg-violet-500 transition-all text-sm sm:text-xl"
+            className="flex items-center space-x-2 reset-btn"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

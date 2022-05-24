@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-sm sm:text-xl dark:text-white;
+    @apply font-mono;
+    @apply text-slate-700;
+  }
+  h1 {
+    @apply text-2xl sm:text-5xl;
+  }
+  h2 {
+    @apply text-xl sm:text-2xl;
+  }
+  h3 {
+    @apply text-base sm:text-xl;
+  }
+}
+
+@layer components {
+  .reset-btn {
+    @apply font-bold bg-violet-400 px-4 py-3 rounded-md active:scale-110 hover:bg-violet-500 transition-all;
+  }
+}
+
+@layer utilities {
+  .x-color {
+    @apply bg-blue-300;
+  }
+
+  .o-color {
+    @apply bg-rose-300;
+  }
+
+  .winning-color {
+    @apply bg-emerald-300;
+  }
+}
