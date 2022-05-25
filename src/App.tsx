@@ -4,7 +4,7 @@ import Square from "./components/Square";
 const App = () => {
   const [squares, setSquares] = useState<string[] | []>(Array(9).fill(null));
   const [isXTurn, setIsXTurn] = useState<boolean>(true);
-  const [isBeat, setIsBeat] = useState<boolean>(true);
+  const [animation, setAnimation] = useState<number>(0);
 
   const checkWinner = (squares: [] | string[]): any => {
     const winConditions = [
@@ -56,9 +56,17 @@ const App = () => {
   }
 
   const handleRestart = (): void => {
+    const isBoardNotEmpty = squares.some((square) => square);
     setIsXTurn(true);
     setSquares(Array(9).fill(null));
-    setIsBeat((prev) => !prev);
+
+    if (isBoardNotEmpty) {
+      if (animation === 2) {
+        setAnimation(0);
+      } else {
+        setAnimation((prev) => prev + 1);
+      }
+    }
   };
 
   return (
@@ -78,7 +86,13 @@ const App = () => {
                 !squares[i] && "hover:bg-slate-300"
               } ${
                 winningPattern?.includes(i) &&
-                `winning-color ${isBeat ? "animate-beat" : "animate-bounce"}`
+                `winning-color ${
+                  animation === 0
+                    ? "animate-beat"
+                    : animation === 1
+                    ? "animate-bounce"
+                    : animation === 2 && "animate-scale"
+                }`
               }`}
             />
           ))}

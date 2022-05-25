@@ -3,7 +3,7 @@
 Tic-tac-toe game using React.js and Tailwind CSS
 
 - https://tic-tac-toe-randell-janus.vercel.app/
-- Toggle between different winning animations as you reset the game!
+- Toggle between different winning animations as you restart a round!
 
 ## Preview
 
