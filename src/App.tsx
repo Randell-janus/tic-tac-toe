@@ -56,11 +56,10 @@ const App = () => {
   }
 
   const handleRestart = (): void => {
-    const isBoardNotEmpty = squares.some((square) => square);
     setIsXTurn(true);
     setSquares(Array(9).fill(null));
 
-    if (isBoardNotEmpty) {
+    if (winningPattern) {
       if (animation === 2) {
         setAnimation(0);
       } else {
