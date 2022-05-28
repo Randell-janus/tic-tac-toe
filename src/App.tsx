@@ -84,8 +84,9 @@ const App = () => {
   if (winningPattern) {
     if (!isSinglePlayer) {
       status = `Winner: ${isXTurn ? "O" : "X"}`;
+    } else if (isSinglePlayer) {
+      status = `${isPlayerTurn ? "You lost!" : "You won!"}`;
     }
-    status = `${isPlayerTurn ? "You lost!" : "You won!"}`;
   } else if (isBoardFull && !winningPattern) {
     status = "Draw!";
   } else {
