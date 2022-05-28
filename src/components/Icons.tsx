@@ -17,7 +17,7 @@ export const ResetIcon = ({ className }: { className: string }) => {
   );
 };
 
-export const SinglePlayer = ({ className }: { className: string }) => {
+export const SinglePlayerIcon = ({ className }: { className: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +36,7 @@ export const SinglePlayer = ({ className }: { className: string }) => {
   );
 };
 
-export const Multiplayer = ({ className }: { className: string }) => {
+export const MultiplayerIcon = ({ className }: { className: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

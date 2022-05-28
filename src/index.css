@@ -8,14 +8,9 @@
     @apply font-mono;
     @apply text-slate-700;
   }
+
   h1 {
-    @apply text-2xl sm:text-5xl;
-  }
-  h2 {
-    @apply text-xl sm:text-2xl;
-  }
-  h3 {
-    @apply text-base sm:text-xl;
+    @apply text-3xl sm:text-6xl;
   }
 }
 
@@ -41,10 +36,5 @@
   .reset-btn {
     @apply btn-common;
     @apply bg-violet-400 hover:bg-violet-500;
-  }
-
-  .mode-btn {
-    @apply btn-common;
-    @apply bg-indigo-300 hover:bg-indigo-400;
   }
 }

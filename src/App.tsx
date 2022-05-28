@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { ResetIcon, SinglePlayer, Multiplayer } from "./components/Icons";
+import { ResetIcon } from "./components/Icons";
 import Square from "./components/Square";
+import RadioButton from "./components/RadioButton";
 
 const App = () => {
   const [squares, setSquares] = useState<string[] | []>(Array(9).fill(null));
-  const [isSinglePlayer, setIsSinglePlayer] = useState<boolean>(true);
+  const [gameMode, setGameMode] = useState<string>("1");
 
   const [isXTurn, setIsXTurn] = useState<boolean>(true);
   const [animation, setAnimation] = useState<number>(0);
@@ -64,7 +65,7 @@ const App = () => {
       return;
     }
 
-    if (!isSinglePlayer) {
+    if (gameMode === "2") {
       squares[i] = isXTurn ? "X" : "O";
       setSquares(squares);
       setIsXTurn(!isXTurn);
@@ -82,17 +83,17 @@ const App = () => {
   let status;
 
   if (winningPattern) {
-    if (!isSinglePlayer) {
+    if (gameMode === "2") {
       status = `Winner: ${isXTurn ? "O" : "X"}`;
-    } else if (isSinglePlayer) {
+    } else if (gameMode === "1") {
       status = `${isPlayerTurn ? "You lost!" : "You won!"}`;
     }
   } else if (isBoardFull && !winningPattern) {
     status = "Draw!";
   } else {
-    if (!isSinglePlayer) {
+    if (gameMode === "2") {
       status = "Player: " + (isXTurn ? "X" : "O");
-    } else if (isSinglePlayer) {
+    } else if (gameMode === "1") {
       status = `${isPlayerTurn ? "Your turn" : "Thinking..."}`;
     }
   }
@@ -122,9 +123,9 @@ const App = () => {
     }
   };
 
-  const handleGameMode = (): void => {
+  const handleGameMode = (e: React.ChangeEvent<HTMLInputElement>): void => {
     handleRestart();
-    setIsSinglePlayer((prev) => !prev);
+    setGameMode(e.target.value);
   };
 
   useEffect(() => {
@@ -179,20 +180,11 @@ const App = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="space-y-4 sm:space-y-8">
-        <h1 className="font-bold">TIC-TAC-TOE</h1>
-        <button className="mode-btn" onClick={handleGameMode}>
-          {isSinglePlayer ? (
-            <div className="flex items-center space-x-2">
-              <SinglePlayer className="h-4 w-4 sm:h-5 sm:w-5" />
-              <p>Player vs Computer</p>
-            </div>
-          ) : (
-            <div className="flex items-center space-x-2">
-              <Multiplayer className="h-4 w-4 sm:h-5 sm:w-5" />
-              <p>Player vs Player</p>
-            </div>
-          )}
-        </button>
+        <h1 className="font-bold text-center">TIC-TAC-TOE</h1>
+        <div onChange={handleGameMode} className="flex justify-evenly">
+          <RadioButton label="Single-player" value={"1"} gameMode={gameMode} />
+          <RadioButton label="Two-player" value={"2"} gameMode={gameMode} />
+        </div>
         <div className="grid grid-cols-3 gap-2 sm:gap-4">
           {squares.map((value, i) => (
             <Square
