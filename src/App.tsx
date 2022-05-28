@@ -79,26 +79,36 @@ const App = () => {
     }
   };
 
-  const putComputerAt = (i: any) => {
-    let newSquares = squares;
-    newSquares[i] = "O";
-    setSquares([...newSquares]);
-  };
-
   let status;
 
   if (winningPattern) {
     if (!isSinglePlayer) {
       status = `Winner: ${isXTurn ? "O" : "X"}`;
     }
-    status = `Winner: ${isPlayerTurn ? "O" : "X"}`;
+    status = `${isPlayerTurn ? "You lost!" : "You won!"}`;
   } else if (isBoardFull && !winningPattern) {
     status = "Draw!";
   } else {
-    status = "Player: " + (isXTurn ? "X" : "O");
+    if (!isSinglePlayer) {
+      status = "Player: " + (isXTurn ? "X" : "O");
+    } else if (isSinglePlayer) {
+      status = `${isPlayerTurn ? "Your turn" : "Thinking..."}`;
+    }
   }
 
+  let delayTurn: any;
+
+  const putComputerAtSquare = (i: any) => {
+    let newSquares = squares;
+    newSquares[i] = "O";
+    // add a half second delay on computer turn
+    delayTurn = window.setTimeout(() => {
+      setSquares([...newSquares]);
+    }, 1000);
+  };
+
   const handleRestart = (): void => {
+    clearTimeout(delayTurn);
     setIsXTurn(true);
     setSquares(Array(9).fill(null));
 
@@ -118,44 +128,50 @@ const App = () => {
 
   useEffect(() => {
     if (isComputerTurn) {
-      const randomIndex =
-        emptyIndexes[Math.ceil(Math.random() * emptyIndexes.length)];
-
+      // Priority: computer marks middle tile if vacant and corner tiles are marked
+      if (
+        squares[4] === null &&
+        !squares[1] &&
+        !squares[3] &&
+        !squares[5] &&
+        !squares[7]
+      ) {
+        putComputerAtSquare(4);
+        return;
+      }
+      // Priority: win game
       const winningLines = linesThatAre("O", "O", null);
-      const linesToBlock = linesThatAre("X", "X", null);
-      const linesToContinue = linesThatAre("O", null, null);
-
-      // if (squares[4] === null) {
-      //   putComputerAt(4);
-      // }
-
       if (winningLines.length > 0) {
         const winningIndex = winningLines[0].filter(
           (index) => squares[index] === null
         )[0];
-        if (!winningPattern && !isBoardFull) putComputerAt(winningIndex);
+        if (!winningPattern && !isBoardFull) putComputerAtSquare(winningIndex);
         return;
       }
-
+      // Priority: block opponent
+      const linesToBlock = linesThatAre("X", "X", null);
       if (linesToBlock.length > 0) {
         const blockIndex = linesToBlock[0].filter(
           (index) => squares[index] === null
         )[0];
-        if (!winningPattern && !isBoardFull) putComputerAt(blockIndex);
+        if (!winningPattern && !isBoardFull) putComputerAtSquare(blockIndex);
         return;
       }
-
+      // Priority: prioritize turns that can lead closer to winning
+      const linesToContinue = linesThatAre("O", null, null);
       if (linesToContinue.length > 0) {
         if (!winningPattern && !isBoardFull) {
-          putComputerAt(
+          putComputerAtSquare(
             linesToContinue[0].filter((index) => squares[index] === null)[0]
           );
         }
 
         return;
       }
-
-      if (!winningPattern && !isBoardFull) putComputerAt(randomIndex);
+      // randomize computer turn if priority moves are not applicable
+      const randomIndex =
+        emptyIndexes[Math.ceil(Math.random() * emptyIndexes.length)];
+      if (!winningPattern && !isBoardFull) putComputerAtSquare(randomIndex);
     }
   }, [squares]);
 
