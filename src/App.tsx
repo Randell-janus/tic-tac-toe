@@ -29,6 +29,19 @@ const App = () => {
     .filter((val) => val !== null);
   const isBoardFull = squares.every((i) => i !== null);
 
+  const linesThatAre = (
+    a: string | null,
+    b: string | null,
+    c: string | null
+  ) => {
+    return winConditions.filter((squareIndexes) => {
+      const squareValues = squareIndexes.map((index) => squares[index]);
+      return (
+        JSON.stringify([a, b, c].sort()) === JSON.stringify(squareValues.sort())
+      );
+    });
+  };
+
   const checkWinner = (squares: [] | string[]): any => {
     for (let i = 0; i < winConditions.length; i++) {
       const [a, b, c] = winConditions[i];
@@ -43,6 +56,8 @@ const App = () => {
 
     return null;
   };
+
+  const winningPattern = checkWinner(squares);
 
   const handleTurn = (i: number): void => {
     if (checkWinner(squares) || squares[i]) {
@@ -64,7 +79,11 @@ const App = () => {
     }
   };
 
-  const winningPattern = checkWinner(squares);
+  const putComputerAt = (i: any) => {
+    let newSquares = squares;
+    newSquares[i] = "O";
+    setSquares([...newSquares]);
+  };
 
   let status;
 
@@ -98,15 +117,43 @@ const App = () => {
   };
 
   useEffect(() => {
-    const putComputerAt = (i: any) => {
-      let newSquares = squares;
-      newSquares[i] = "O";
-      setSquares([...newSquares]);
-    };
-
     if (isComputerTurn) {
       const randomIndex =
         emptyIndexes[Math.ceil(Math.random() * emptyIndexes.length)];
+
+      const winningLines = linesThatAre("O", "O", null);
+      const linesToBlock = linesThatAre("X", "X", null);
+      const linesToContinue = linesThatAre("O", null, null);
+
+      // if (squares[4] === null) {
+      //   putComputerAt(4);
+      // }
+
+      if (winningLines.length > 0) {
+        const winningIndex = winningLines[0].filter(
+          (index) => squares[index] === null
+        )[0];
+        if (!winningPattern && !isBoardFull) putComputerAt(winningIndex);
+        return;
+      }
+
+      if (linesToBlock.length > 0) {
+        const blockIndex = linesToBlock[0].filter(
+          (index) => squares[index] === null
+        )[0];
+        if (!winningPattern && !isBoardFull) putComputerAt(blockIndex);
+        return;
+      }
+
+      if (linesToContinue.length > 0) {
+        if (!winningPattern && !isBoardFull) {
+          putComputerAt(
+            linesToContinue[0].filter((index) => squares[index] === null)[0]
+          );
+        }
+
+        return;
+      }
 
       if (!winningPattern && !isBoardFull) putComputerAt(randomIndex);
     }
