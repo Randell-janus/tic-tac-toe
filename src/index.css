@@ -19,12 +19,6 @@
   }
 }
 
-@layer components {
-  .reset-btn {
-    @apply font-bold bg-violet-400 px-4 py-3 rounded-md active:scale-110 hover:bg-violet-500 transition-all;
-  }
-}
-
 @layer utilities {
   .x-color {
     @apply bg-blue-300;
@@ -36,5 +30,21 @@
 
   .winning-color {
     @apply bg-emerald-300;
+  }
+
+  .btn-common {
+    @apply font-bold px-4 py-3 rounded-md active:scale-110 transition-all;
+  }
+}
+
+@layer components {
+  .reset-btn {
+    @apply btn-common;
+    @apply bg-violet-400 hover:bg-violet-500;
+  }
+
+  .mode-btn {
+    @apply btn-common;
+    @apply bg-indigo-300 hover:bg-indigo-400;
   }
 }
