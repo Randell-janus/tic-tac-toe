@@ -214,7 +214,7 @@ const App = () => {
       }
       // Avoids small triangle player move
       if (difficulty === "hard") {
-        if (fullLines.length > 0) {
+        if (fullLines.length === 1 && squares[4] === "X") {
           if (!winningPattern && !isBoardFull) {
             putComputerAtSquare(randomCornerIndex);
             return;
