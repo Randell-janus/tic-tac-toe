@@ -25,9 +25,7 @@ const App = () => {
     squares.filter((square) => square !== null).length % 2 === 0;
   const isComputerTurn =
     squares.filter((square) => square !== null).length % 2 === 1;
-  const emptyIndexes = squares
-    .map((square, index) => (square === null ? index : null))
-    .filter((val) => val !== null);
+
   const isBoardFull = squares.every((i) => i !== null);
 
   const linesThatAre = (
@@ -106,7 +104,7 @@ const App = () => {
     // add a half second delay on computer turn
     delayTurn = window.setTimeout(() => {
       setSquares([...newSquares]);
-    }, 1000);
+    }, 800);
   };
 
   const handleRestart = (): void => {
@@ -129,8 +127,18 @@ const App = () => {
   };
 
   useEffect(() => {
+    const emptyIndexes = squares
+      .map((square, index) => (square === null ? index : null))
+      .filter((val) => val !== null);
+    const cornerIndexes = squares
+      .map((square, index) => (square === null ? index : null))
+      .filter((val) => val === 0 || val === 2 || val === 6 || val === 8);
+    const crossIndexes = squares
+      .map((square, index) => (square === null ? index : null))
+      .filter((val) => val === 1 || val === 3 || val === 5 || val === 7);
+
     if (isComputerTurn) {
-      // Priority: computer marks middle tile if vacant and corner tiles are marked
+      // Priority: computer marks middle tile if first player turn is corner
       if (
         squares[4] === null &&
         !squares[1] &&
@@ -141,6 +149,15 @@ const App = () => {
         putComputerAtSquare(4);
         return;
       }
+      // Priority: computer only marks corners if first player turn was middle tile
+      const randomCornerIndex =
+        cornerIndexes[Math.floor(Math.random() * cornerIndexes.length)];
+      if (squares[4] && emptyIndexes.length === 8) {
+        if (!winningPattern && !isBoardFull)
+          putComputerAtSquare(randomCornerIndex);
+        return;
+      }
+
       // Priority: win game
       const winningLines = linesThatAre("O", "O", null);
       if (winningLines.length > 0) {
@@ -157,6 +174,14 @@ const App = () => {
           (index) => squares[index] === null
         )[0];
         if (!winningPattern && !isBoardFull) putComputerAtSquare(blockIndex);
+        return;
+      }
+      // Priority: if first player turn are corners and second player turn are crosses, computer marks corners
+      const someCornerIndexesMarked = cornerIndexes.some((i) => i !== null);
+      const someCrossIndexesMarked = crossIndexes.some((i) => i !== null);
+      if (someCornerIndexesMarked && someCrossIndexesMarked) {
+        if (!winningPattern && !isBoardFull)
+          putComputerAtSquare(randomCornerIndex);
         return;
       }
       // Priority: prioritize turns that can lead closer to winning
