@@ -10,7 +10,7 @@
   }
 
   h1 {
-    @apply text-2xl sm:text-5xl;
+    @apply text-3xl sm:text-6xl;
   }
 }
 
