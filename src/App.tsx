@@ -6,7 +6,7 @@ import RadioButton from "./components/RadioButton";
 const App = () => {
   const [squares, setSquares] = useState<string[] | []>(Array(9).fill(null));
   const [gameMode, setGameMode] = useState<string>("1");
-  const [difficulty, setDifficulty] = useState<string>("easy");
+  const [difficulty, setDifficulty] = useState<string>("hard");
 
   const [isXTurn, setIsXTurn] = useState<boolean>(true);
   const [animation, setAnimation] = useState<number>(0);
@@ -132,24 +132,25 @@ const App = () => {
     setDifficulty(e.target.value);
   };
 
-  const emptyIndexes = squares
-    .map((square, index) => (square === null ? index : null))
-    .filter((val) => val !== null);
-  const cornerIndexes = squares
-    .map((square, index) => (square === null ? index : null))
-    .filter((val) => val === 0 || val === 2 || val === 6 || val === 8);
-  const crossIndexes = squares
-    .map((square, index) => (square === null ? index : null))
-    .filter((val) => val === 1 || val === 3 || val === 5 || val === 7);
-
-  const randomCornerIndex =
-    cornerIndexes[Math.floor(Math.random() * cornerIndexes.length)];
-  const randomCrossIndex =
-    crossIndexes[Math.floor(Math.random() * crossIndexes.length)];
-  const someCornerIndexesMarked = cornerIndexes.some((i) => i !== null);
-  const fullLines = linesThatAre("X", "X", "O");
-
   useEffect(() => {
+    const emptyIndexes = squares
+      .map((square, index) => (square === null ? index : null))
+      .filter((val) => val !== null);
+    const cornerIndexes = squares
+      .map((square, index) => (square === null ? index : null))
+      .filter((val) => val === 0 || val === 2 || val === 6 || val === 8);
+    const crossIndexes = squares
+      .map((square, index) => (square === null ? index : null))
+      .filter((val) => val === 1 || val === 3 || val === 5 || val === 7);
+
+    const randomCornerIndex =
+      cornerIndexes[Math.floor(Math.random() * cornerIndexes.length)];
+    const randomCrossIndex =
+      crossIndexes[Math.floor(Math.random() * crossIndexes.length)];
+    const someCornerIndexesMarked = cornerIndexes.some((i) => i !== null);
+
+    const fullLines = linesThatAre("X", "X", "O");
+
     if (isComputerTurn) {
       // Priority: computer marks middle tile if vacant
       if (difficulty === "hard") {
@@ -200,7 +201,11 @@ const App = () => {
       }
       // Avoids big triangle player move
       if (difficulty === "hard") {
-        if (fullLines.length > 0 && squares[4] === "O") {
+        if (
+          fullLines.length > 0 &&
+          squares[4] === "O" &&
+          emptyIndexes.length === 6
+        ) {
           if (!winningPattern && !isBoardFull) {
             putComputerAtSquare(randomCrossIndex);
             return;
@@ -216,7 +221,6 @@ const App = () => {
           }
         }
       }
-
       // Priority: prioritize turns that can lead closer to winning
       const linesToContinue = linesThatAre("O", null, null);
       if (linesToContinue.length > 0) {

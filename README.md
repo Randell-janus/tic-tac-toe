@@ -7,6 +7,7 @@ Tic-tac-toe game using React.js and Tailwind CSS
 ## Features
 
 - Game modes: Single-player (default) & Two-player
+- Difficulty levels: Easy & Hard (default)
 - Toggle between different winning animations as you restart a round!
 
 ## Preview
